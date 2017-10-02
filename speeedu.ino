@@ -2,7 +2,8 @@
 #include <ArduinoJson.h>
 
 SPEEEduino_LowLevel device = SPEEEduino_LowLevel();
-String payload = "GET / HTTP/1.1\r\nHost: xdk.herokuapp.com\r\n\r\n";
+String reqData = "GET / HTTP/1.1\r\nHost: xdk.herokuapp.com\r\n\r\n";
+String reqMail = "GET /alert HTTP/1.1\r\nHost: xdk.herokuapp.com\r\n\r\n";
 
 int buzzPin = 10;
 int fanPin = 11;
@@ -26,7 +27,7 @@ void setup() {
 }
 
 void loop() {
-  device.sendDataSingleConnection(payload);
+  device.sendDataSingleConnection(reqData);
   String data = device.receiveData(SINGLE).content;
 
   int i;
@@ -65,8 +66,30 @@ void loop() {
     // Switch off heater
   }
 
+  // Remember to add cooldown condition below, otherwise the emails will pile up
   if (false) { // Infrared sensor
-    // Send email to alert for clean-up
+    device.sendDataSingleConnection(reqMail);
+    String res = device.receiveData(SINGLE).content;
+
+    int j;
+    char* sent;
+    for (j=0;j<res.length();j++) {
+      if (res[j] == '{') {
+        sent = &(res[j]);
+      }
+    }
+
+    Serial.println(sent);
+
+    StaticJsonBuffer<100> jsonBuffer;
+
+    JsonObject& sentObj = jsonBuffer.parseObject(sent);
+
+    String sentStatus = sentObj["sent"];
+
+    if (sentStatus == "OK") {
+      // Restart cooldown
+    }
   }
 
   Serial.println("SUCCESS loop");
