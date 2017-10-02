@@ -10,6 +10,10 @@ int fanPin = 11;
 int heatPin = 12;
 int ledPin = 13;
 
+unsigned long prevMillis = 0;
+long interval = 120000; // 2 minutes
+// long interval = 28800000; // 8 hours
+
 void setup() {
   pinMode(buzzPin, OUTPUT);
   pinMode(fanPin, OUTPUT);
@@ -66,31 +70,13 @@ void loop() {
     // Switch off heater
   }
 
-  // Remember to add cooldown condition below, otherwise the emails will pile up
-  if (false) { // Infrared sensor
+  unsigned long currMillis = millis();
+  if (false && currMillis - prevMillis > interval) { // Add condition for infrared sensor
+    prevMillis = currMillis;
     device.sendDataSingleConnection(reqMail);
-    String res = device.receiveData(SINGLE).content;
-
-    int j;
-    char* sent;
-    for (j=0;j<res.length();j++) {
-      if (res[j] == '{') {
-        sent = &(res[j]);
-      }
-    }
-
-    Serial.println(sent);
-
-    StaticJsonBuffer<100> jsonBuffer;
-
-    JsonObject& sentObj = jsonBuffer.parseObject(sent);
-
-    String sentStatus = sentObj["sent"];
-
-    if (sentStatus == "OK") {
-      // Restart cooldown
-    }
   }
+
+  Serial.println(prevMillis);
 
   Serial.println("SUCCESS loop");
   delay(5000);
