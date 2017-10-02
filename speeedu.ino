@@ -21,11 +21,11 @@ void setup() {
   device.setConnectionAmount(SINGLE);
   device.setWiFiMode(STATION);
   device.joinAP("FABLAB14", "fabpass123");
+  device.beginSingleConnection(TCP, "xdk.herokuapp.com", "80");
   Serial.println("SUCCESS setup");
 }
 
 void loop() {
-  device.beginSingleConnection(TCP, "xdk.herokuapp.com", "80");
   device.sendDataSingleConnection(payload);
   String data = device.receiveData(SINGLE).content;
 
