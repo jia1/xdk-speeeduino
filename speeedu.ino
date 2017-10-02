@@ -4,7 +4,17 @@
 SPEEEduino_LowLevel device = SPEEEduino_LowLevel();
 String payload = "GET / HTTP/1.1\r\nHost: xdk.herokuapp.com\r\n\r\n";
 
+int buzzPin = 10;
+int fanPin = 11;
+int heatPin = 12;
+int ledPin = 13;
+
 void setup() {
+  pinMode(buzzPin, OUTPUT);
+  pinMode(fanPin, OUTPUT);
+  pinMode(heatPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  tone(buzzPin, 440);
   Serial.begin(9600);
   device.slowOpenLink();
   device.setDHCPEnabled(true);
@@ -42,6 +52,22 @@ void loop() {
   Serial.println(millilux);
   Serial.println(noiselevel);
   Serial.println(temperature);
+
+  if (millilux < 1000) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+
+  if (temperature < 25) {
+    // Trigger heater
+  } else {
+    // Switch off heater
+  }
+
+  if (false) { // Infrared sensor
+    // Send email to alert for clean-up
+  }
 
   Serial.println("SUCCESS loop");
   delay(5000);
