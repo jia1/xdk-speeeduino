@@ -67,9 +67,9 @@ void loop() {
   }
 
   if (temperature < 25) {
-    // Trigger heater
+    digitalWrite(heatPin, HIGH);
   } else {
-    // Switch off heater
+    digitalWrite(heatPin, LOW);
   }
 
   if (digitalRead(irPin) == LOW) {
