@@ -12,8 +12,8 @@ int heatPin = 12;
 int ledPin = 13;
 
 unsigned long prevMillis = 0;
-long interval = 120000; // 2 minutes
-// long interval = 28800000; // 8 hours
+unsigned long interval = 120000; // 2 minutes
+// unsigned long interval = 28800000; // 8 hours
 
 void setup() {
   pinMode(irPin, INPUT);
@@ -36,8 +36,8 @@ void loop() {
   device.sendDataSingleConnection(reqData);
   String data = device.receiveData(SINGLE).content;
 
-  int i;
-  char* json;
+  uint16_t i;
+  char* json = {};
   for (i=0;i<data.length();i++) {
     if (data[i] == '{') {
       json = &(data[i]);
