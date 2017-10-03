@@ -12,7 +12,7 @@ int heatPin = 12;
 int ledPin = 13;
 
 unsigned long prevMillis = 0;
-unsigned long interval = 120000; // 2 minutes
+unsigned long interval = 600000; // 10 minutes
 // unsigned long interval = 28800000; // 8 hours
 
 void setup() {
@@ -63,25 +63,35 @@ void loop() {
 
   if (millilux < 1000) {
     digitalWrite(ledPin, HIGH);
+    Serial.println("SUCCESS dim");
   } else {
-    digitalWrite(ledPin, LOW);
+    digitalWrite(ledPin, HIGH);
+    Serial.println("SUCCESS bri");
   }
 
   if (temperature < 25) {
     digitalWrite(heatPin, HIGH);
+    Serial.println("SUCCESS cold");
   } else {
     digitalWrite(heatPin, LOW);
+    Serial.println("SUCCESS warm");
   }
 
-  if (digitalRead(irPin) == LOW) {
+  if (digitalRead(irPin) == HIGH) { // Emitter not sensed
+    Serial.println("SUCCESS ye mosquitoes");
+    Serial.println(prevMillis);
     unsigned long currMillis = millis();
+    Serial.println(currMillis);
     if (currMillis - prevMillis > interval) {
       prevMillis = currMillis;
       device.sendDataSingleConnection(reqMail);
+      Serial.println("SUCCESS ye mail");
+    } else {
+      Serial.println("SUCCESS no mail");
     }
+  } else {
+    Serial.println("SUCCESS no mosquitoes");
   }
-
-  Serial.println(prevMillis);
 
   Serial.println("SUCCESS loop");
   delay(5000);
