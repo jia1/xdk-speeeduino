@@ -22,6 +22,7 @@ void setup() {
   pinMode(heatPin, OUTPUT);
   pinMode(ledPin, OUTPUT);
   tone(buzzPin, 440);
+  digitalWrite(fanPin, HIGH);
   Serial.begin(9600);
   device.slowOpenLink();
   device.setDHCPEnabled(true);
