@@ -11,7 +11,7 @@ int fanPin = 11;
 int heatPin = 12;
 int ledPin = 13;
 
-unsigned long prevMillis = 0;
+unsigned long prevMillis = -600000;
 unsigned long interval = 600000; // 10 minutes
 // unsigned long interval = 28800000; // 8 hours
 
