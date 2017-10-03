@@ -65,7 +65,7 @@ void loop() {
     digitalWrite(ledPin, HIGH);
     Serial.println("SUCCESS dim");
   } else {
-    digitalWrite(ledPin, HIGH);
+    digitalWrite(ledPin, LOW);
     Serial.println("SUCCESS bri");
   }
 
