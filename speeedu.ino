@@ -5,6 +5,7 @@ SPEEEduino_LowLevel device = SPEEEduino_LowLevel();
 String reqData = "GET / HTTP/1.1\r\nHost: xdk.herokuapp.com\r\n\r\n";
 String reqMail = "GET /alert HTTP/1.1\r\nHost: xdk.herokuapp.com\r\n\r\n";
 
+int irPin = 9;
 int buzzPin = 10;
 int fanPin = 11;
 int heatPin = 12;
@@ -15,6 +16,7 @@ long interval = 120000; // 2 minutes
 // long interval = 28800000; // 8 hours
 
 void setup() {
+  pinMode(irPin, INPUT);
   pinMode(buzzPin, OUTPUT);
   pinMode(fanPin, OUTPUT);
   pinMode(heatPin, OUTPUT);
@@ -70,10 +72,12 @@ void loop() {
     // Switch off heater
   }
 
-  unsigned long currMillis = millis();
-  if (false && currMillis - prevMillis > interval) { // Add condition for infrared sensor
-    prevMillis = currMillis;
-    device.sendDataSingleConnection(reqMail);
+  if (digitalRead(irPin) == LOW) {
+    unsigned long currMillis = millis();
+    if (currMillis - prevMillis > interval) {
+      prevMillis = currMillis;
+      device.sendDataSingleConnection(reqMail);
+    }
   }
 
   Serial.println(prevMillis);
